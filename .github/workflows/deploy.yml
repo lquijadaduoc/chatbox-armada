@@ -3,15 +3,12 @@ name: CI/CD Pipeline Armada Plus
 on:
   push:
     branches:
-      - dev   # Ejecuta validaciones al desarrollar
-      - main  # Ejecuta despliegue automático en producción
+      - dev
+      - main
 
 jobs:
-  # ==========================================
-  # ETAPA 1: CI (Pruebas de construcción)
-  # ==========================================
   build-check:
-    name: Validar imágenes Docker
+    name: Validar imagenes Docker
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
@@ -21,33 +18,30 @@ jobs:
         run: |
           docker compose config
 
-      - name: Probar compilación del Backend
+      - name: Probar compilacion del Backend
         run: |
           docker build ./backend
 
-      - name: Probar compilación del Frontend
+      - name: Probar compilacion del Frontend
         run: |
           docker build ./frontend
 
-  # ==========================================
-    # ETAPA 2: CD (Despliegue a Producción)
-    # ==========================================
-    deploy-production:
-      name: Desplegar en Cloud Server
-      needs: build-check
-      if: github.ref == 'refs/heads/main'
-      runs-on: ubuntu-latest
-      steps:
-        - name: Conectar por SSH y actualizar servicios
-          uses: appleboy/ssh-action@v1.0.3
-          with:
-            host: ${{ secrets.SERVER_HOST }}
-            username: ${{ secrets.SERVER_USER }}
-            password: ${{ secrets.SERVER_PASSWORD }}  # <-- Se usa password en vez de key
-            port: ${{ secrets.SERVER_PORT }}
-            script: |
-              cd /root/chatbox-armada
-              git checkout main
-              git pull origin main
-              docker compose up -d --build
-              docker image prune -f
+  deploy-production:
+    name: Desplegar en Cloud Server
+    needs: build-check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conectar por SSH y actualizar servicios
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /root/chatbot-armada
+            git checkout main
+            git pull origin main
+            docker compose up -d --build
+            docker image prune -f
