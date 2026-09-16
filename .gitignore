@@ -1,0 +1,6 @@
+Set-Content -Path .gitignore -Value @"
+.env
+npm/
+__pycache__/
+*.pyc
+"@

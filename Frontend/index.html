@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asistente | Convenios Armada Plus</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <script src="marked.min.js"></script>
+    <style>
+      body {
+        background-color: #eef2f5;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      .chat-container {
+        width: 100%;
+        max-width: 650px;
+        height: 85vh;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+      }
+      .chat-header {
+        background: linear-gradient(135deg, #0d2c4d 0%, #1a4a7b 100%);
+        color: white;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 4px solid #00a0df;
+      }
+      .header-title {
+        font-weight: 600;
+        font-size: 1.15rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background-color: #f8f9fa;
+      }
+      .msg-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+      .msg {
+        max-width: 85%;
+        padding: 12px 18px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      }
+      .msg-user {
+        background-color: #00a0df;
+        color: white;
+        align-self: flex-end;
+        border-radius: 18px 18px 2px 18px;
+      }
+      .msg-bot {
+        background-color: #ffffff;
+        color: #333;
+        align-self: flex-start;
+        border-radius: 18px 18px 18px 2px;
+        border: 1px solid #e9ecef;
+      }
+      .msg-bot p {
+        margin-bottom: 0.5rem;
+      }
+      .msg-bot p:last-child {
+        margin-bottom: 0;
+      }
+      .msg-bot ul,
+      .msg-bot ol {
+        padding-left: 1.25rem;
+        margin-bottom: 0;
+      }
+      .chat-footer {
+        padding: 16px 24px;
+        background: #fff;
+        border-top: 1px solid #e9ecef;
+      }
+      .input-group {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border-radius: 50px;
+        overflow: hidden;
+      }
+      .form-control {
+        border: 1px solid #ced4da;
+        padding: 12px 20px;
+        border-right: none;
+      }
+      .form-control:focus {
+        box-shadow: none;
+        border-color: #00a0df;
+      }
+      .btn-send {
+        background-color: #0d2c4d;
+        color: white;
+        border: none;
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .btn-send:hover {
+        background-color: #00a0df;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="header-title">
+          <!-- Ícono SVG Robot -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a3.23 3.23 0 0 1-.248 1.252l1.394 1.393a.5.5 0 0 1-.707.708l-1.317-1.318a3.24 3.24 0 0 1-1.622.447H5.5a3.24 3.24 0 0 1-1.622-.447l-1.317 1.318a.5.5 0 0 1-.707-.708l1.394-1.393A3.23 3.23 0 0 1 3 9.22V8.062ZM5.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-.5-.5Zm5 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-.5-.5Z"
+            />
+            <path
+              d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1ZM2 8.062A4.24 4.24 0 0 1 6.22 3.86a27.6 27.6 0 0 1 3.56 0A4.24 4.24 0 0 1 14 8.062V9.5a4.5 4.5 0 0 1-4.5 4.5h-3A4.5 4.5 0 0 1 2 9.5V8.062Z"
+            />
+          </svg>
+          Armada Plus IA
+        </div>
+        <span
+          class="badge bg-success rounded-pill px-3 py-2 d-flex align-items-center"
+        >
+          <!-- Ícono SVG Punto Conectado -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="8"
+            fill="currentColor"
+            class="me-2"
+            viewBox="0 0 16 16"
+          >
+            <circle cx="8" cy="8" r="8" />
+          </svg>
+          En línea
+        </span>
+      </div>
+
+      <div class="chat-body" id="chatBody">
+        <div class="msg-wrapper">
+          <div class="msg msg-bot">
+            <strong>¡Hola!</strong> Soy el asistente virtual oficial del Sistema
+            de Convenios Armada Plus. ¿En qué te puedo orientar hoy?
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-footer">
+        <form id="chatForm">
+          <div class="input-group">
+            <input
+              type="text"
+              id="userInput"
+              class="form-control"
+              placeholder="Escribe tu consulta aquí..."
+              autocomplete="off"
+              required
+            />
+            <button
+              type="submit"
+              class="btn btn-send"
+              id="sendBtn"
+              aria-label="Enviar"
+            >
+              <!-- Ícono SVG Avión de Envío -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.136L2.4 7.6l11.73-5.024Z"
+                />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const chatBody = document.getElementById("chatBody");
+      const chatForm = document.getElementById("chatForm");
+      const userInput = document.getElementById("userInput");
+      const sendBtn = document.getElementById("sendBtn");
+
+      // Detección dinámica de entorno
+        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        const API_URL = isLocal 
+        ? "http://localhost:8000/api/chat" 
+        : "https://api.bellohorizontedev.cl/api/chat";
+
+      function appendMessage(text, isUser) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "msg-wrapper";
+        const div = document.createElement("div");
+        div.className = `msg ${isUser ? "msg-user" : "msg-bot"}`;
+
+        if (isUser) {
+          div.textContent = text;
+        } else {
+          div.innerHTML = marked.parse(text);
+        }
+
+        wrapper.appendChild(div);
+        chatBody.appendChild(wrapper);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        appendMessage(message, true);
+        userInput.value = "";
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+
+        const loadingId = "loading-" + Date.now();
+        const loadingWrapper = document.createElement("div");
+        loadingWrapper.className = "msg-wrapper";
+        loadingWrapper.id = loadingId;
+        loadingWrapper.innerHTML = `
+      <div class="msg msg-bot text-muted d-flex align-items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3.5a.5.5 0 0 1-.5-.5v-3.5A.5.5 0 0 1 8 4z"/>
+        </svg>
+        Consultando bases oficiales...
+      </div>`;
+        chatBody.appendChild(loadingWrapper);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pregunta: message }),
+          });
+          const data = await response.json();
+          document.getElementById(loadingId).remove();
+
+          if (response.ok) {
+            appendMessage(data.respuesta, false);
+          } else {
+            appendMessage(
+              "Error: " + (data.detail || "Error al procesar consulta."),
+              false,
+            );
+          }
+        } catch (err) {
+          document.getElementById(loadingId)?.remove();
+          appendMessage(
+            "Error de conexión: No se pudo contactar a la API.",
+            false,
+          );
+        } finally {
+          userInput.disabled = false;
+          sendBtn.disabled = false;
+          userInput.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

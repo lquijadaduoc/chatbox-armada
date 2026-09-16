@@ -1,0 +1,45 @@
+services:
+  # 1. NGINX PROXY MANAGER (Gestor de Subdominios y SSL)
+  npm:
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: nginx_manager
+    restart: unless-stopped
+    ports:
+      - "80:80" # Tráfico HTTP web
+      - "443:443" # Tráfico HTTPS seguro
+      - "81:81" # Panel de administración (acceso temporal)
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+    volumes:
+      - ./npm/data:/data
+      - ./npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - red_chatbot
+
+  # 2. BACKEND (FastAPI + Groq + FAISS)
+  api-chatbot:
+    build: ./backend
+    container_name: armada_api
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    networks:
+      - red_chatbot
+
+  # 3. FRONTEND (Interfaz Web)
+  web-chatbot:
+    build: ./frontend
+    container_name: armada_web
+    restart: always
+    ports:
+      - 3000:80
+    depends_on:
+      - api-chatbot
+    networks:
+      - red_chatbot
+
+networks:
+  red_chatbot:
+    name: red_chatbot_interna
