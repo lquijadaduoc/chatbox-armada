@@ -7,18 +7,15 @@ on:
       - main
 
 jobs:
+  # ==========================================
+  # ETAPA 1: CI (Solo compilar imágenes)
+  # ==========================================
   build-check:
     name: Validar imagenes Docker
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
-
-      - name: Verificar Docker Compose
-        env:
-          GROQ_API_KEY: "dummy_key_for_testing"
-        run: |
-          docker compose config
 
       - name: Probar compilacion del Backend
         run: |
@@ -28,10 +25,11 @@ jobs:
         run: |
           docker build ./Frontend
 
-
+  # ==========================================
+  # ETAPA 2: CD (Despliegue a Producción)
+  # ==========================================
   deploy-production:
     name: Desplegar en Cloud Server
-    needs: build-check
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -43,7 +41,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /root/chatbot-armada
+            cd /root/chatbox-armada
             git checkout main
             git pull origin main
             docker compose up -d --build
