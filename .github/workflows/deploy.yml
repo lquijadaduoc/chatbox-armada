@@ -22,11 +22,12 @@ jobs:
 
       - name: Probar compilacion del Backend
         run: |
-          docker build ./backend
+          docker build ./Backend
 
       - name: Probar compilacion del Frontend
         run: |
-          docker build ./frontend
+          docker build ./Frontend
+
 
   deploy-production:
     name: Desplegar en Cloud Server
