@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /root/chatbot-armada
+            cd /root/chatbox-armada
             git checkout main
             git pull origin main
             docker compose up -d --build
